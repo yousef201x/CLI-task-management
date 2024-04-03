@@ -53,11 +53,11 @@ def myTasks(status='pending'):
     
     except sqlite3.Error as error:
         # Handle SQLite database errors and log them
-        print(handleError(error))
+        return handleError(error)
     
     except Exception as error:
         # Handle other unexpected errors and log them
-        print(handleError(error))
+        return handleError(error)
 
 def createTask(description, date, status='pending'):
     try:
@@ -78,11 +78,11 @@ def createTask(description, date, status='pending'):
 
     except sqlite3.Error as error:
         # Handle SQLite database errors and log them
-        print(handleError(error))
+        return handleError(error)
     
     except Exception as error:
         # Handle other unexpected errors and log them
-        print(handleError(error))
+        return handleError(error)
 
 def updateTask(taskID, description=None, date=None, status=None):
     try:
@@ -113,11 +113,11 @@ def updateTask(taskID, description=None, date=None, status=None):
         return True  # Return True indicating successful update
 
     except sqlite3.Error as error:
-        print(handleError(error))
+        return handleError(error)
 
     except Exception as error:
         # Handle other unexpected errors and log them
-        print(handleError(error))
+        return handleError(error)
 
 def deleteTask(taskID):
     try:
@@ -140,8 +140,8 @@ def deleteTask(taskID):
 
     except sqlite3.Error as error:
         # Handle SQLite database errors and log them
-        print(handleError(error))
+        return handleError(error)
 
     except Exception as error:
         # Handle other unexpected errors and log them
-        print(handleError(error))
+        return handleError(error)

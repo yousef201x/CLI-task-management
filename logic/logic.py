@@ -2,7 +2,7 @@ import sqlite3
 
 # Function to establish a connection to the SQLite database
 def openConnection():
-    return sqlite3.connect("../database/sqlite3.db")
+    return sqlite3.connect("database/sqlite3.db")
 
 # Function to create a cursor object to execute SQL commands
 def createCursor(connection):
@@ -16,7 +16,7 @@ def endConnection(connection, cursor):
 # Function to log errors to a log file
 def logError(message):
     try:
-        log = open('../logs/logs.txt', 'w')  # Open the log file in write mode
+        log = open('logs/logs.txt', 'w')  # Open the log file in write mode
         log.write(message)  # Write the error message to the log file
         log.close()  # Close the log file
         return True 

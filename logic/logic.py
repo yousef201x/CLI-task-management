@@ -25,6 +25,12 @@ def logError(message):
     except Exception as error:
         return False
 
+def handleError(error) :
+    print("Something went wrong, please try again later..")
+    logError("ERROR: " + str(error))
+    return False
+
+
 def myTasks(status='pending'):
     try:
         # Open a connection to the database
@@ -47,15 +53,11 @@ def myTasks(status='pending'):
     
     except sqlite3.Error as error:
         # Handle SQLite database errors and log them
-        print("Something went wrong, please try again later..")
-        logError("SQLite: " + str(error))
-        return False
+        print(handleError(error))
     
     except Exception as error:
         # Handle other unexpected errors and log them
-        print("Something went wrong, please try again later..")
-        logError("ERROR: " + str(error))
-        return False
+        print(handleError(error))
 
 def createTask(description, date, status='pending'):
     try:
@@ -76,15 +78,11 @@ def createTask(description, date, status='pending'):
 
     except sqlite3.Error as error:
         # Handle SQLite database errors and log them
-        print("Something went wrong, please try again later..")
-        logError("SQLite: " + str(error))
-        return False
+        print(handleError(error))
     
     except Exception as error:
         # Handle other unexpected errors and log them
-        print("Something went wrong, please try again later..")
-        logError("ERROR: " + str(error))
-        return False
+        print(handleError(error))
 
 def updateTask(taskID, description=None, date=None, status=None):
     try:
@@ -115,16 +113,11 @@ def updateTask(taskID, description=None, date=None, status=None):
         return True  # Return True indicating successful update
 
     except sqlite3.Error as error:
-        # Handle SQLite database errors and log them
-        print("Something went wrong, please try again later..")
-        logError("SQLite: " + str(error))
-        return False
+        print(handleError(error))
 
     except Exception as error:
         # Handle other unexpected errors and log them
-        print("Something went wrong, please try again later..")
-        logError("ERROR: " + str(error))
-        return False
+        print(handleError(error))
 
 def deleteTask(taskID):
     try:
@@ -147,12 +140,8 @@ def deleteTask(taskID):
 
     except sqlite3.Error as error:
         # Handle SQLite database errors and log them
-        print("Something went wrong, please try again later..")
-        logError("SQLite: " + str(error))
-        return False
+        print(handleError(error))
 
     except Exception as error:
         # Handle other unexpected errors and log them
-        print("Something went wrong, please try again later..")
-        logError("ERROR: " + str(error))
-        return False
+        print(handleError(error))

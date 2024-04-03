@@ -56,7 +56,7 @@ while True:
     elif action_input == "3":
         description = colored_input("Enter task description: ", BLUE)
         due_date = colored_input("Enter due date: ", BLUE)
-        status = colored_input("Enter status (optional, press Enter to default to 'pending'): ", BLUE) or 'pending'
+        status = colored_input("Enter status (optional, press Enter to default 'pending' or Enter 'completed'): ", BLUE) or 'pending'
         app.createTask(description, due_date, status)
 
     elif action_input == "4":
@@ -75,7 +75,7 @@ while True:
             new_date = colored_input("Enter new due date: ", BLUE)
             app.updateTask(taskID=task_id, date=new_date)
         elif choice == "3":
-            new_status = colored_input("Enter new status: ", BLUE)
+            new_status = colored_input("Enter 'pending' or 'completed'", BLUE)
             app.updateTask(taskID=task_id, status=new_status)
 
     elif action_input == "5":

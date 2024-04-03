@@ -14,9 +14,8 @@ That's it! You can now use the Task Management System to efficiently manage your
 
 ## System Components
 1. **SQLite Database:** Stores task information such as ID, description, due date, and status.
-2. **Logic Module (`logic.py`):** Contains Python functions to interact with the database and perform CRUD (Create, Read, Update, Delete) operations on tasks.
+2. **Logic Module (`logic/logic.py`):** Contains Python functions to interact with the database and perform CRUD (Create, Read, Update, Delete) operations on tasks.
 3. **Command-Line Interface (`app.py`):** Provides a user-friendly interface to interact with the system functionalities.
-
 ## Database Schema
 The database schema includes a single table named `tasks` with the following columns:
 - `id`: Integer (Primary Key, Auto Increment)

@@ -9,10 +9,10 @@ cursor = connection.cursor()
 # Create tasks table if it doesn't exist
 cursor.execute('''
     CREATE TABLE IF NOT EXISTS tasks (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        description TEXT NOT NULL,
-        due_date DATE NOT NULL,
-        status TEXT DEFAULT 'pending' CHECK(status IN ('pending', 'completed'))
+        id INTEGER PRIMARY KEY AUTOINCREMENT,  -- Unique identifier for each task
+        description TEXT NOT NULL,  -- Description of the task, cannot be empty
+        due_date DATE NOT NULL,  -- Due date of the task, cannot be empty
+        status TEXT DEFAULT 'pending' CHECK(status IN ('pending', 'completed'))  -- Status of the task, defaults to 'pending', can only be 'pending' or 'completed'
     );
 ''')
 

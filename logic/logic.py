@@ -1,147 +1,109 @@
 import sqlite3 
 
+# Function to establish a connection to the SQLite database
 def openConnection():
-    # Establishes a connection to the SQLite database
     return sqlite3.connect("../database/sqlite3.db")
 
+# Function to create a cursor object to execute SQL commands
 def createCursor(connection):
-    # Creates a cursor object to execute SQL commands
     return connection.cursor()
 
+# Function to close the cursor and connection
 def endConnection(connection, cursor):
-    # Closes the cursor and connection
     cursor.close()
     connection.close()
 
+# Function to log errors to a log file
 def logError(message):
     try:
-        # Opens the log file in write mode ('w')
-        log = open('../logs/logs.txt', 'w')
-        # Writes the error message to the log file
-        log.write(message)
-        # Closes the log file
-        log.close()
+        log = open('../logs/logs.txt', 'w')  # Open the log file in write mode
+        log.write(message)  # Write the error message to the log file
+        log.close()  # Close the log file
         return True 
     except Exception as error:
         return False
 
-def handleError(error) :
+# Function to handle errors by printing a message and logging the error
+def handleError(error):
     print("Something went wrong, please try again later..")
     logError("ERROR: " + str(error))
     return False
 
-
+# Function to fetch tasks based on their status
 def myTasks(status='pending'):
     try:
-        # Open a connection to the database
-        connection = openConnection()
-
-        # Create a cursor for executing SQL commands
-        cursor = createCursor(connection)
-
-        # Execute the SELECT query with a parameterized status value
-        cursor.execute("SELECT * FROM tasks WHERE status=?", (status,))
-
-        # Fetch all rows returned by the query
-        tasks = cursor.fetchall()
-
-        # Close the cursor and connection
-        endConnection(connection, cursor)
-
-        # Return the fetched tasks
-        return tasks
-    
+        connection = openConnection()  # Open a connection to the database
+        cursor = createCursor(connection)  # Create a cursor for executing SQL commands
+        cursor.execute("SELECT * FROM tasks WHERE status=?", (status,))  # Execute the SELECT query with a parameterized status value
+        tasks = cursor.fetchall()  # Fetch all rows returned by the query
+        endConnection(connection, cursor)  # Close the cursor and connection
+        return tasks  # Return the fetched tasks
     except sqlite3.Error as error:
-        # Handle SQLite database errors and log them
-        return handleError(error)
-    
+        return handleError(error)  # Handle SQLite database errors and log them
     except Exception as error:
-        # Handle other unexpected errors and log them
-        return handleError(error)
+        return handleError(error)  # Handle other unexpected errors and log them
 
+# Function to search tasks based on a search term in description or due_date
+def searchTask(search):
+    try:
+        connection = openConnection()  # Open a connection to the database
+        cursor = createCursor(connection)  # Create a cursor for executing SQL commands
+        query = "SELECT * FROM tasks WHERE description LIKE ? OR due_date LIKE ?"  # SQL query to search for tasks
+        search_term = f'%{search}%'  # Format the search term with wildcard characters
+        tasks = cursor.execute(query, (search_term, search_term)).fetchall()  # Execute the query and fetch all matching tasks
+        cursor.close()  # Close the cursor
+        connection.close()  # Close the connection
+        return tasks  # Return the fetched tasks
+    except sqlite3.Error as error:
+        return handleError(error)  # Handle SQLite database errors and log them
+    except Exception as error:
+        return handleError(error)  # Handle other unexpected errors and log them
+
+# Function to create a new task
 def createTask(description, date, status='pending'):
     try:
-        # Open a connection to the database
-        connection = openConnection()
-
-        # Create a cursor for executing SQL commands
-        cursor = createCursor(connection)
-
-        # Insert a new task into the database
-        cursor.execute("INSERT INTO tasks (description, due_date, status) VALUES (?, ?, ?)", (description, date, status))
-
-        # Commit changes to the database
-        connection.commit()
-
-        # Close the cursor and connection
-        endConnection(connection, cursor)
-
+        connection = openConnection()  # Open a connection to the database
+        cursor = createCursor(connection)  # Create a cursor for executing SQL commands
+        cursor.execute("INSERT INTO tasks (description, due_date, status) VALUES (?, ?, ?)", (description, date, status))  # Insert a new task into the database
+        connection.commit()  # Commit changes to the database
+        endConnection(connection, cursor)  # Close the cursor and connection
     except sqlite3.Error as error:
-        # Handle SQLite database errors and log them
-        return handleError(error)
-    
+        return handleError(error)  # Handle SQLite database errors and log them
     except Exception as error:
-        # Handle other unexpected errors and log them
-        return handleError(error)
+        return handleError(error)  # Handle other unexpected errors and log them
 
+# Function to update an existing task
 def updateTask(taskID, description=None, date=None, status=None):
     try:
-        # Open a connection to the database
-        connection = openConnection()
+        connection = openConnection()  # Open a connection to the database
+        cursor = createCursor(connection)  # Create a cursor for executing SQL commands
 
-        # Create a cursor for executing SQL commands
-        cursor = createCursor(connection)
-
-        # Check if description is provided and update the task's description
+        # Update the task based on provided information
         if description is not None:
             cursor.execute("UPDATE tasks SET description=? WHERE id=?", (description, taskID))
-
-        # Check if date is provided and update the task's due date
         if date is not None:
             cursor.execute("UPDATE tasks SET due_date=? WHERE id=?", (date, taskID))
-
-        # Check if status is provided and update the task's status
         if status is not None:
             cursor.execute("UPDATE tasks SET status=? WHERE id=?", (status, taskID))
-        
-        # Commit changes to the database
-        connection.commit()
 
-        # Close the cursor and connection
-        endConnection(connection, cursor)
-
+        connection.commit()  # Commit changes to the database
+        endConnection(connection, cursor)  # Close the cursor and connection
         return True  # Return True indicating successful update
-
     except sqlite3.Error as error:
-        return handleError(error)
-
+        return handleError(error)  # Handle SQLite database errors and log them
     except Exception as error:
-        # Handle other unexpected errors and log them
-        return handleError(error)
+        return handleError(error)  # Handle other unexpected errors and log them
 
+# Function to delete a task
 def deleteTask(taskID):
     try:
-        # Open a connection to the database
-        connection = openConnection()
-
-        # Create a cursor for executing SQL commands
-        cursor = createCursor(connection)
-
-        # Delete a task from the database based on taskID
-        cursor.execute("DELETE FROM tasks WHERE id=?", (taskID,))
-
-        # Commit changes to the database
-        connection.commit()
-
-        # Close the cursor and connection
-        endConnection(connection, cursor)
-
+        connection = openConnection()  # Open a connection to the database
+        cursor = createCursor(connection)  # Create a cursor for executing SQL commands
+        cursor.execute("DELETE FROM tasks WHERE id=?", (taskID,))  # Delete a task from the database based on taskID
+        connection.commit()  # Commit changes to the database
+        endConnection(connection, cursor)  # Close the cursor and connection
         return True  # Return True indicating successful deletion
-
     except sqlite3.Error as error:
-        # Handle SQLite database errors and log them
-        return handleError(error)
-
+        return handleError(error)  # Handle SQLite database errors and log them
     except Exception as error:
-        # Handle other unexpected errors and log them
-        return handleError(error)
+        return handleError(error)  # Handle other unexpected errors and log them
